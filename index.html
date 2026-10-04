@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>DÖNNER — Scroll Experience</title>
+<style>
+:root{--bg:#080808;--red:#ff2438;--text:#f7f4f2;--muted:#a9a5a3}
+*{box-sizing:border-box}html{scroll-behavior:auto;background:var(--bg)}body{margin:0;background:#080808;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Display",Segoe UI,sans-serif;overflow-x:hidden}
+body::-webkit-scrollbar{width:0} .scroll{height:760vh;position:relative}.stage{position:sticky;top:0;height:100svh;overflow:hidden;background:radial-gradient(1000px 700px at 68% 46%,#421014 0%,#14090a 35%,#080808 68%);isolation:isolate}
+.noise{position:absolute;inset:0;opacity:.08;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.85'/%3E%3C/svg%3E")}.grid{position:absolute;inset:-20%;opacity:.16;background:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:54px 54px;transform:perspective(700px) rotateX(66deg) translateY(52vh) scale(1.5);transform-origin:center bottom}
+.header{position:absolute;z-index:30;top:0;left:0;right:0;height:82px;padding:0 5vw;display:flex;align-items:center;justify-content:space-between}.brand{font-size:15px;letter-spacing:.38em;font-weight:800}.brand i{color:var(--red);font-style:normal}.menu{width:44px;height:44px;border:1px solid #ffffff22;border-radius:50%;display:grid;place-items:center;backdrop-filter:blur(12px)}.menu:before,.menu:after{content:"";position:absolute;width:16px;height:1px;background:white}.menu:before{transform:translateY(-3px)}.menu:after{transform:translateY(3px)}
+.progress{position:absolute;z-index:40;right:4vw;top:50%;transform:translateY(-50%);height:34vh;width:2px;background:#ffffff18;border-radius:99px}.progress>i{display:block;width:100%;height:0;background:linear-gradient(#fff,var(--red));border-radius:99px;box-shadow:0 0 18px #ff243888}.scene{position:absolute;inset:0}.copy{position:absolute;z-index:8;left:7vw;top:25vh;width:min(670px,54vw);will-change:transform,opacity}.eyebrow{font-size:12px;letter-spacing:.35em;text-transform:uppercase;color:#ffffff99;margin-bottom:18px}.copy h1{margin:0;font-size:clamp(54px,8.2vw,142px);line-height:.78;letter-spacing:-.065em;font-weight:900;text-transform:uppercase}.copy h1 .stroke{-webkit-text-stroke:1px #fff;color:transparent}.copy p{margin-top:30px;max-width:520px;color:#b9b5b3;font-size:clamp(15px,1.25vw,19px);line-height:1.6}.pill{display:inline-flex;margin-top:28px;align-items:center;gap:16px;border:1px solid #ffffff1f;border-radius:999px;padding:8px 8px 8px 18px;background:#ffffff08;backdrop-filter:blur(12px);font-size:13px}.pill b{width:42px;height:42px;border-radius:50%;background:var(--red);display:grid;place-items:center;font-size:18px;box-shadow:0 0 36px #ff243866}
+.product-wrap{position:absolute;z-index:6;left:55vw;top:4vh;width:42vw;height:94vh;display:grid;place-items:center;will-change:transform,opacity;filter:drop-shadow(0 42px 60px #000)}.glow{position:absolute;width:34vw;height:34vw;border-radius:50%;background:#ff243830;filter:blur(45px);transform:scale(.9);will-change:transform,opacity}.doner{position:relative;width:min(25vw,380px);height:min(64vh,650px);transform-origin:50% 50%;will-change:transform,filter}.meat{position:absolute;inset:5% 12% 7%;clip-path:polygon(50% 0,90% 12%,100% 44%,89% 78%,62% 100%,34% 98%,8% 77%,0 42%,13% 13%);background:repeating-linear-gradient(178deg,#f57a34 0 13px,#b43c1f 13px 21px,#6d1d17 21px 27px,#ff9b48 27px 35px);box-shadow:inset -30px -30px 70px #350706aa,inset 25px 0 55px #ffbf6566,0 0 0 1px #ffcc9b22;overflow:hidden}.meat:before{content:"";position:absolute;inset:-25%;background:radial-gradient(circle at 24% 20%,#fff7 0 2px,transparent 3px),radial-gradient(circle at 71% 52%,#ffcf8055 0 3px,transparent 4px),radial-gradient(circle at 42% 76%,#23000088 0 4px,transparent 6px);background-size:38px 41px,52px 47px,62px 56px;mix-blend-mode:screen;opacity:.7}.cap{position:absolute;left:24%;right:24%;height:5%;border-radius:50%;background:linear-gradient(90deg,#8d1f16,#ff8c3a,#7c1b13);z-index:3}.cap.top{top:3%}.cap.bottom{bottom:4%}.rod{position:absolute;left:49%;top:-7%;bottom:-6%;width:2.2%;background:linear-gradient(90deg,#4a4a4a,#e7e7e7,#5b5b5b);border-radius:99px;z-index:-1}.slice{position:absolute;z-index:7;width:70px;height:22px;border-radius:70% 35% 65% 30%;background:linear-gradient(180deg,#ff8f43,#9d2d18);box-shadow:inset 0 3px 4px #ffc47466,0 8px 18px #0009;opacity:0;will-change:transform,opacity}.s1{left:45%;top:36%}.s2{left:56%;top:43%}.s3{left:41%;top:50%}.s4{left:61%;top:55%}.s5{left:48%;top:63%}.sparks{position:absolute;inset:0;z-index:4}.spark{position:absolute;width:4px;height:4px;border-radius:50%;background:#ff7855;box-shadow:0 0 12px #ff2438;opacity:.3;will-change:transform,opacity}
+.word{position:absolute;z-index:5;font-size:clamp(110px,23vw,410px);font-weight:950;line-height:.72;letter-spacing:-.085em;white-space:nowrap;color:#ffffff08;left:50%;top:51%;transform:translate(-50%,-50%);text-transform:uppercase;pointer-events:none;will-change:transform,opacity}.redline{position:absolute;z-index:3;left:0;right:0;top:67%;height:1px;background:linear-gradient(90deg,transparent,#ff2438 20%,#ff2438 80%,transparent);box-shadow:0 0 28px #ff243888;transform:scaleX(0);will-change:transform}
+.panel{position:absolute;z-index:10;right:7vw;top:20vh;width:min(480px,38vw);opacity:0;transform:translate3d(80px,0,0);will-change:transform,opacity}.panel .num{font-size:12px;color:var(--red);letter-spacing:.28em}.panel h2{font-size:clamp(48px,6vw,92px);line-height:.88;letter-spacing:-.055em;margin:14px 0 22px}.panel p{color:#aaa5a2;line-height:1.6;font-size:16px}.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:36px}.stat{padding:18px 16px;border:1px solid #ffffff14;background:#ffffff08;border-radius:16px;backdrop-filter:blur(8px)}.stat strong{display:block;font-size:25px}.stat span{font-size:11px;color:#ffffff77;text-transform:uppercase;letter-spacing:.14em}
+.code{position:absolute;z-index:12;left:7vw;bottom:9vh;width:min(560px,46vw);border:1px solid #ffffff12;border-radius:22px;padding:24px;background:#0d0d0dcc;backdrop-filter:blur(18px);box-shadow:0 30px 90px #000;opacity:0;transform:translate3d(0,80px,0) rotateX(12deg);transform-origin:center bottom;will-change:transform,opacity}.code .dots{display:flex;gap:7px;margin-bottom:20px}.dot{width:8px;height:8px;border-radius:50%;background:#ffffff24}.dot:first-child{background:var(--red)}pre{margin:0;color:#c7c5c3;font-size:12px;line-height:1.7;white-space:pre-wrap}.r{color:#ff6272}.o{color:#ffb06f}.g{color:#7de5b4}.w{color:white}
+.endcopy{position:absolute;z-index:14;inset:0;display:grid;place-items:center;text-align:center;opacity:0;transform:scale(.86);will-change:transform,opacity}.endcopy h3{font-size:clamp(58px,10vw,160px);line-height:.82;letter-spacing:-.07em;margin:0;text-transform:uppercase}.endcopy h3 em{display:block;color:var(--red);font-style:normal}.endcopy p{color:#aaa;margin-top:25px}.hint{position:absolute;z-index:25;bottom:25px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:#ffffff55;display:flex;gap:10px;align-items:center}.wheel{height:28px;width:16px;border:1px solid #ffffff33;border-radius:12px;position:relative}.wheel:after{content:"";width:2px;height:6px;position:absolute;left:6px;top:5px;background:#fff;border-radius:9px;animation:w 1.3s infinite}@keyframes w{0%{transform:translateY(0);opacity:1}100%{transform:translateY(10px);opacity:0}}
+@media(max-width:800px){.scroll{height:700vh}.header{height:68px;padding:0 22px}.copy{left:22px;top:17vh;width:calc(100vw - 44px)}.copy h1{font-size:clamp(56px,18vw,92px)}.copy p{font-size:14px;max-width:78vw;margin-top:22px}.product-wrap{left:27vw;top:25vh;width:85vw;height:72vh}.doner{width:54vw;height:53vh}.glow{width:76vw;height:76vw}.word{font-size:39vw;top:58%}.progress{right:14px;height:26vh}.panel{right:22px;left:22px;top:auto;bottom:10vh;width:auto;text-align:left}.panel h2{font-size:16vw}.statrow{gap:7px}.stat{padding:13px 10px}.stat strong{font-size:20px}.stat span{font-size:9px}.code{left:18px;right:18px;bottom:8vh;width:auto;padding:18px}.code pre{font-size:10px}.endcopy h3{font-size:20vw}.hint{bottom:16px}.redline{top:72%}}
+@media(prefers-reduced-motion:reduce){.hint{display:none}}
+</style>
+</head>
+<body>
+<main class="scroll" id="scroll">
+<section class="stage" id="stage">
+<div class="noise"></div><div class="grid" id="grid"></div>
+<header class="header"><div class="brand">DÖN<i>N</i>ER</div><div class="menu"></div></header>
+<div class="progress"><i id="bar"></i></div>
+<div class="word" id="word">FLAME</div><div class="redline" id="redline"></div>
+<div class="copy" id="copy"><div class="eyebrow">Scroll crafted experience — 01</div><h1>Built by<br><span class="stroke">fire.</span></h1><p>Eine Landingpage, die nicht nur scrollt. Jede Bewegung deines Fingers steuert die Szene — Zoom, Tiefe, Rotation und Übergänge.</p><div class="pill">Scroll to explore <b>↓</b></div></div>
+<div class="product-wrap" id="product"><div class="glow" id="glow"></div><div class="doner" id="doner"><div class="rod"></div><div class="cap top"></div><div class="meat"></div><div class="cap bottom"></div></div>
+<div class="slice s1" id="s1"></div><div class="slice s2" id="s2"></div><div class="slice s3" id="s3"></div><div class="slice s4" id="s4"></div><div class="slice s5" id="s5"></div><div class="sparks" id="sparks"></div></div>
+<div class="panel" id="panel"><div class="num">02 — PRODUCTION</div><h2>20+ MIO.<br>PORTIONS.</h2><p>Von der Idee bis zur fertigen digitalen Inszenierung: starke Marken brauchen Bewegung, die sich physisch anfühlt.</p><div class="statrow"><div class="stat"><strong>120</strong><span>Hz ready</span></div><div class="stat"><strong>3D</strong><span>Depth</span></div><div class="stat"><strong>1:1</strong><span>Scroll</span></div></div></div>
+<div class="code" id="code"><div class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></div><pre><span class="r">motion</span> = <span class="o">scroll</span>.progress
+<span class="w">product</span>.scale(<span class="g">1 → 2.4</span>)
+<span class="w">layers</span>.translateZ(<span class="g">dynamic</span>)
+<span class="w">scene</span>.transition(<span class="r">continuous</span>)
+
+// no canned fade animations
+// your finger controls every frame</pre></div>
+<div class="endcopy" id="end"><div><h3>Every scroll<em>changes it.</em></h3><p>Scroll back up — the whole sequence reverses smoothly.</p></div></div>
+<div class="hint" id="hint"><span class="wheel"></span> scroll / swipe</div>
+</section>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id), scroll=$('scroll'), copy=$('copy'), product=$('product'), doner=$('doner'), glow=$('glow'), word=$('word'), panel=$('panel'), code=$('code'), end=$('end'), bar=$('bar'), redline=$('redline'), grid=$('grid'), hint=$('hint');
+const slices=[$('s1'),$('s2'),$('s3'),$('s4'),$('s5')];
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const seg=(p,a,b)=>clamp((p-a)/(b-a));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const lerp=(a,b,t)=>a+(b-a)*t;
+let target=0,current=0,raf=0;
+for(let i=0;i<42;i++){const s=document.createElement('i');s.className='spark';s.style.left=(18+Math.random()*70)+'%';s.style.top=(8+Math.random()*82)+'%';s.dataset.x=(Math.random()*2-1)*260;s.dataset.y=(Math.random()*2-1)*240;s.dataset.r=Math.random()*360;document.getElementById('sparks').appendChild(s)}
+const sparks=[...document.querySelectorAll('.spark')];
+function setT(el,x=0,y=0,z=0,s=1,r=0,rx=0){el.style.transform=`translate3d(${x}px,${y}px,${z}px) scale(${s}) rotate(${r}deg) rotateX(${rx}deg)`}
+function draw(){current+=(target-current)*.11; const p=current; bar.style.height=(p*100)+'%';
+ const a=ease(seg(p,0,.19)); copy.style.opacity=1-a; setT(copy,lerp(0,-160,a),lerp(0,-35,a),0,lerp(1,.93,a));
+ const b=ease(seg(p,.02,.34)); const c=ease(seg(p,.28,.53));
+ let px=lerp(0,-innerWidth*.23,b)+lerp(0,innerWidth*.08,c); let py=lerp(0,-innerHeight*.08,b)+lerp(0,innerHeight*.12,c); let sc=lerp(1,2.15,b); sc=lerp(sc,.66,c); setT(product,px,py,0,sc,lerp(0,8,b)-lerp(0,14,c)); product.style.opacity=1-seg(p,.72,.86);
+ doner.style.filter=`saturate(${lerp(1,1.35,b)}) contrast(${lerp(1,1.1,b)})`; setT(doner,0,0,0,1,lerp(0,-10,b)+lerp(0,18,c)); glow.style.transform=`scale(${lerp(.8,1.6,b)-lerp(0,.55,c)})`; glow.style.opacity=lerp(.5,1,b);
+ const explode=ease(seg(p,.23,.43)); slices.forEach((el,i)=>{const ang=[-120,-55,12,65,130][i]*Math.PI/180; const dist=lerp(0,190+35*i,explode); el.style.opacity=explode*(1-seg(p,.47,.57)); el.style.transform=`translate3d(${Math.cos(ang)*dist}px,${Math.sin(ang)*dist}px,0) rotate(${lerp(0,[80,-35,55,-70,120][i],explode)}deg) scale(${lerp(.5,1.15,explode)})`});
+ sparks.forEach((s,i)=>{const ep=seg(p,.21,.47); s.style.opacity=ep*(1-seg(p,.49,.6)); s.style.transform=`translate3d(${+s.dataset.x*ep}px,${+s.dataset.y*ep}px,0) scale(${.4+ep*1.5}) rotate(${+s.dataset.r*ep}deg)`});
+ const w=ease(seg(p,.13,.34)); word.style.opacity=lerp(.12,.58,w)*(1-seg(p,.46,.62)); word.style.transform=`translate(-50%,-50%) scale(${lerp(.78,1.18,w)}) translateX(${lerp(0,-7,w)}vw)`; redline.style.transform=`scaleX(${seg(p,.18,.38)})`; redline.style.opacity=1-seg(p,.54,.65);
+ const pa=ease(seg(p,.39,.58)); const pout=ease(seg(p,.67,.78)); panel.style.opacity=pa*(1-pout); setT(panel,lerp(80,0,pa)-lerp(0,90,pout),lerp(20,0,pa),0,1);
+ const co=ease(seg(p,.56,.73)), coo=ease(seg(p,.76,.86)); code.style.opacity=co*(1-coo); code.style.transform=`translate3d(0,${lerp(80,0,co)+lerp(0,-70,coo)}px,0) rotateX(${lerp(12,0,co)}deg) scale(${lerp(.94,1,co)})`;
+ const ep=ease(seg(p,.80,.96)); end.style.opacity=ep; end.style.transform=`scale(${lerp(.86,1,ep)}) translateY(${lerp(40,0,ep)}px)`;
+ grid.style.opacity=.16*(1-seg(p,.74,.9)); grid.style.transform=`perspective(700px) rotateX(66deg) translateY(${52-18*p}vh) scale(${1.5+1.1*p})`;
+ hint.style.opacity=1-seg(p,.03,.08);
+ raf=requestAnimationFrame(draw)}
+function measure(){const rect=scroll.getBoundingClientRect(); const max=scroll.offsetHeight-innerHeight; target=clamp(-rect.top/max)}
+addEventListener('scroll',measure,{passive:true}); addEventListener('resize',measure); measure(); draw();
+})();
+</script>
+</body>
+</html>
