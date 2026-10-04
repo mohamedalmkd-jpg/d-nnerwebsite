@@ -11,33 +11,35 @@ html,body{margin:0;background:#050505;color:#fff;font-family:Inter,-apple-system
 html{scroll-behavior:auto}
 body{overflow-x:hidden}
 body::-webkit-scrollbar{width:0;height:0}
-.track{position:relative;height:780vh;background:#050505}
-.stage{position:sticky;top:0;height:100svh;width:100%;overflow:hidden;display:grid;place-items:center;background:#050505}
-.frame{position:relative;width:min(100vw,177.7778svh);aspect-ratio:16/10;display:grid;place-items:center;overflow:hidden;background:#050505;transform:translateZ(0)}
-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#050505;transform:translateZ(0);backface-visibility:hidden}
-.loader{position:fixed;z-index:20;inset:0;background:#050505;display:grid;place-items:center;transition:opacity .4s ease}
+.track{position:relative;height:720vh;background:#050505}
+.stage{position:sticky;top:0;height:100svh;overflow:hidden;background:#050505;display:grid;place-items:center}
+.frame{position:relative;width:min(100vw,177.78svh);aspect-ratio:16/10;overflow:hidden;background:#050505;transform:translateZ(0);will-change:transform,filter}
+video{position:absolute;inset:-2%;width:104%;height:104%;object-fit:cover;background:#050505;display:block;transform:scale(1.02);will-change:transform,filter;backface-visibility:hidden}
+.shade{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 60% 50%,transparent 25%,rgba(0,0,0,.1) 55%,rgba(0,0,0,.4) 100%)}
+.progress{position:fixed;top:0;left:0;width:0;height:2px;background:#ff2438;box-shadow:0 0 12px #ff2438aa;z-index:10}
+.hint{position:fixed;z-index:9;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#ffffff88;transition:opacity .25s;pointer-events:none}
+.loader{position:fixed;inset:0;z-index:20;background:#050505;display:grid;place-items:center;transition:opacity .35s ease}
 .loader.hide{opacity:0;pointer-events:none}
 .loader span{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#ffffff88}
 .loader span:after{content:"";display:block;width:42px;height:1px;margin:14px auto 0;background:#ff2638;animation:pulse 1s ease-in-out infinite}
 @keyframes pulse{50%{transform:scaleX(.35);opacity:.4}}
-.hint{position:fixed;z-index:10;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#ffffff66;pointer-events:none;transition:opacity .25s}
-.progress{position:fixed;z-index:12;top:0;left:0;width:0;height:2px;background:#ff2438;box-shadow:0 0 12px #ff243888;pointer-events:none}
-@media(max-width:700px){
-  .track{height:700vh}
-  .stage{place-items:center}
-  .frame{width:100vw;aspect-ratio:16/10}
-}
+@keyframes fallbackMove{0%,100%{transform:scale(1.02) translate3d(0,0,0)}50%{transform:scale(1.07) translate3d(-1.2%,.6%,0)}}
+video.fallback{animation:fallbackMove 4s ease-in-out infinite}
 </style>
 </head>
 <body>
 <div class="track" id="track">
   <div class="stage">
-    <div class="frame"><video id="scrub" muted playsinline preload="auto"></video></div>
+    <div class="frame" id="frame">
+      <video id="vid" muted playsinline loop preload="auto"></video>
+      <div class="shade"></div>
+    </div>
   </div>
 </div>
 <div class="progress" id="progress"></div>
 <div class="hint" id="hint">scroll / swipe</div>
 <div class="loader" id="loader"><span>DÖNNER</span></div>
+
 <script>
 (async()=>{
   const files=[
@@ -45,11 +47,50 @@ video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:
     "p3_0.b64","p3_1.b64","p3_2.b64","p3_3.b64","p3_4.b64","p3_5.b64","p3_6.b64",
     "p4_0.b64","p4_1.b64","p4_2.b64","p4_3.b64","p4_4.b64","p4_5.b64"
   ];
-  const video=document.getElementById("scrub");
+  const vid=document.getElementById("vid");
+  const frame=document.getElementById("frame");
   const track=document.getElementById("track");
-  const progress=document.getElementById("progress");
   const loader=document.getElementById("loader");
+  const progress=document.getElementById("progress");
   const hint=document.getElementById("hint");
+
+  let target=0,current=0,lastScroll=scrollY,lastTs=performance.now(),started=false;
+
+  function clamp(v,a=0,b=1){return Math.min(b,Math.max(a,v))}
+  function measure(){
+    const r=track.getBoundingClientRect();
+    const max=Math.max(1,track.offsetHeight-innerHeight);
+    target=clamp(-r.top/max);
+    progress.style.width=(target*100)+"%";
+    hint.style.opacity=String(clamp(1-target*16));
+  }
+
+  function animate(){
+    current += (target-current)*.12;
+    const p=current;
+    const scale=1.01 + Math.sin(p*Math.PI)*.08 + p*.04;
+    const tx=(-3 + p*6);
+    const ty=(p<.5 ? p*2.4 : (1-p)*2.4);
+    const rot=(p-.5)*1.8;
+    frame.style.transform=`translate3d(${tx}vw,${ty}vh,0) scale(${scale}) rotate(${rot}deg)`;
+    frame.style.filter=`saturate(${1+p*.18}) contrast(${1+p*.05})`;
+    requestAnimationFrame(animate);
+  }
+
+  async function start(){
+    if(started) return;
+    started=true;
+    try{
+      vid.classList.remove("fallback");
+      vid.muted=true;
+      vid.playsInline=true;
+      vid.loop=true;
+      vid.playbackRate=1;
+      await vid.play();
+    }catch(e){
+      vid.classList.add("fallback");
+    }
+  }
 
   try{
     const parts=await Promise.all(files.map(async file=>{
@@ -61,52 +102,43 @@ video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:
     const binary=atob(b64);
     const bytes=new Uint8Array(binary.length);
     for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
-    video.src=URL.createObjectURL(new Blob([bytes],{type:"video/mp4"}));
+    const blob=new Blob([bytes],{type:"video/mp4"});
+    vid.src=URL.createObjectURL(blob);
+
+    vid.addEventListener("loadeddata",async()=>{
+      loader.classList.add("hide");
+      try{
+        await start();
+      }catch(e){}
+    },{once:true});
+
+    vid.addEventListener("canplay",()=>start(),{once:true});
+
+    // First touch/scroll always starts playback on iPhone.
+    addEventListener("touchstart",start,{passive:true,once:true});
+    addEventListener("pointerdown",start,{passive:true,once:true});
+    addEventListener("scroll",()=>{
+      start();
+      const now=performance.now();
+      const dy=Math.abs(scrollY-lastScroll);
+      const dt=Math.max(16,now-lastTs);
+      const speed=Math.min(1.8,.75+(dy/dt)*2.6);
+      try{vid.playbackRate=speed}catch(e){}
+      lastScroll=scrollY; lastTs=now;
+      measure();
+    },{passive:true});
+
+    // Safety: if autoplay is blocked, visual still moves.
+    setTimeout(()=>{if(vid.paused) vid.classList.add("fallback")},1200);
   }catch(e){
     loader.querySelector("span").textContent="Reload";
-    return;
-  }
-
-  let target=0,current=0,duration=7.46,ready=false,lastSet=-1;
-
-  function measure(){
-    const rect=track.getBoundingClientRect();
-    const max=Math.max(1,track.offsetHeight-innerHeight);
-    target=Math.max(0,Math.min(1,-rect.top/max));
-    progress.style.width=(target*100)+"%";
-    hint.style.opacity=Math.max(0,1-target*20);
-  }
-
-  function render(){
-    current+=(target-current)*.34;
-    if(ready){
-      const t=Math.max(0.001,Math.min(duration-.025,current*duration));
-      if(Math.abs(t-lastSet)>.012){
-        try{ video.currentTime=t; lastSet=t; }catch(e){}
-      }
-    }
-    requestAnimationFrame(render);
-  }
-
-  video.addEventListener("loadedmetadata",()=>{
-    duration=Number.isFinite(video.duration)?video.duration:duration;
-    ready=true;
-    try{video.currentTime=.001}catch(e){}
+    vid.classList.add("fallback");
     loader.classList.add("hide");
-  },{once:true});
+  }
 
-  // iOS Safari allows fast seeking more reliably after one user gesture.
-  const unlock=()=>{
-    const p=video.play();
-    if(p&&p.then) p.then(()=>{video.pause();}).catch(()=>{});
-  };
-  addEventListener("touchstart",unlock,{passive:true,once:true});
-  addEventListener("pointerdown",unlock,{passive:true,once:true});
-
-  addEventListener("scroll",measure,{passive:true});
   addEventListener("resize",measure,{passive:true});
   measure();
-  render();
+  animate();
 })();
 </script>
 </body>
