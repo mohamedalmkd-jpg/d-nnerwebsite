@@ -3,142 +3,242 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050505">
+<meta name="theme-color" content="#080808">
 <title>DÖNNER</title>
 <style>
+:root{--red:#ff2a32;--bg:#080808;--muted:#9b9b96;--white:#f4f3ef}
 *{box-sizing:border-box}
-html,body{margin:0;background:#050505;color:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+html,body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
 html{scroll-behavior:auto}
 body{overflow-x:hidden}
-body::-webkit-scrollbar{width:0;height:0}
-.track{position:relative;height:720vh;background:#050505}
-.stage{position:sticky;top:0;height:100svh;overflow:hidden;background:#050505;display:grid;place-items:center}
-.frame{position:relative;width:min(100vw,177.78svh);aspect-ratio:16/10;overflow:hidden;background:#050505;transform:translateZ(0);will-change:transform,filter}
-video{position:absolute;inset:-2%;width:104%;height:104%;object-fit:cover;background:#050505;display:block;transform:scale(1.02);will-change:transform,filter;backface-visibility:hidden}
-.shade{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 60% 50%,transparent 25%,rgba(0,0,0,.1) 55%,rgba(0,0,0,.4) 100%)}
-.progress{position:fixed;top:0;left:0;width:0;height:2px;background:#ff2438;box-shadow:0 0 12px #ff2438aa;z-index:10}
-.hint{position:fixed;z-index:9;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#ffffff88;transition:opacity .25s;pointer-events:none}
-.loader{position:fixed;inset:0;z-index:20;background:#050505;display:grid;place-items:center;transition:opacity .35s ease}
-.loader.hide{opacity:0;pointer-events:none}
-.loader span{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#ffffff88}
-.loader span:after{content:"";display:block;width:42px;height:1px;margin:14px auto 0;background:#ff2638;animation:pulse 1s ease-in-out infinite}
-@keyframes pulse{50%{transform:scaleX(.35);opacity:.4}}
-@keyframes fallbackMove{0%,100%{transform:scale(1.02) translate3d(0,0,0)}50%{transform:scale(1.07) translate3d(-1.2%,.6%,0)}}
-video.fallback{animation:fallbackMove 4s ease-in-out infinite}
+body::-webkit-scrollbar{width:0}
+.track{height:760vh;position:relative;background:#080808}
+.stage{position:sticky;top:0;height:100svh;overflow:hidden;background:
+radial-gradient(900px 700px at 72% 42%,#3b1614 0%,#1b0c0c 30%,#090909 68%),
+linear-gradient(#0a0a0a,#070707)}
+.header{position:absolute;z-index:50;top:0;left:0;right:0;height:72px;padding:0 5vw;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border-bottom:1px solid #ffffff10;background:#080808d9;backdrop-filter:blur(14px)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:12px;letter-spacing:.08em}
+.logoDot{width:22px;height:22px;border-radius:50%;background:var(--red);display:grid;place-items:center;font-size:10px;font-weight:900}
+.nav{display:flex;gap:24px;font-size:10px;color:#d6d4cf}
+.headerRight{justify-self:end;display:flex;align-items:center;gap:15px;font-size:10px}
+.headerRight .phone{color:#d6d4cf}
+.headerRight .ctaTop{background:var(--red);padding:10px 14px;border-radius:999px;font-weight:800}
+.progress{position:absolute;z-index:60;top:71px;left:0;height:2px;width:0;background:var(--red);box-shadow:0 0 16px #ff2a3299}
+.scene{position:absolute;inset:0;will-change:opacity,transform}
+.copy{position:absolute;z-index:12;left:9vw;top:29vh;width:min(520px,41vw);will-change:transform,opacity,filter}
+.copy .eyebrow{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#aaa;margin-bottom:16px}
+.copy h1,.copy h2{margin:0;line-height:.92;letter-spacing:-.055em;font-weight:850}
+.copy h1{font-size:clamp(48px,6.3vw,108px)}
+.copy h2{font-size:clamp(42px,5.1vw,86px)}
+.copy p{max-width:430px;color:#a6a39f;font-size:13px;line-height:1.55;margin-top:20px}
+.redBtn{display:inline-flex;align-items:center;gap:14px;margin-top:20px;background:var(--red);padding:11px 16px;border-radius:999px;font-size:11px;font-weight:800}
+.darkBtn{display:inline-flex;align-items:center;margin-left:8px;margin-top:20px;border:1px solid #ffffff20;padding:10px 15px;border-radius:999px;font-size:11px;color:#ddd}
+.red{color:var(--red)}
+.heroBgText{position:absolute;z-index:1;left:50%;top:56%;transform:translate(-50%,-50%);font-size:23vw;font-weight:950;letter-spacing:-.08em;color:#ffffff05;white-space:nowrap;will-change:transform,opacity}
+.skewerWrap{position:absolute;z-index:10;left:56vw;top:13vh;width:31vw;height:76vh;display:grid;place-items:center;will-change:transform,opacity,filter}
+.skewer{position:relative;width:min(23vw,340px);height:min(68vh,650px);filter:drop-shadow(0 35px 55px #000d)}
+.skewer .rod{position:absolute;left:49%;top:-7%;bottom:-7%;width:2.4%;border-radius:99px;background:linear-gradient(90deg,#454545,#ededed 48%,#5d5d5d);z-index:-1}
+.skewer .meat{position:absolute;inset:3% 5% 4%;clip-path:polygon(48% 0,69% 3%,87% 13%,98% 32%,100% 52%,93% 71%,78% 87%,61% 100%,38% 98%,19% 87%,7% 69%,0 47%,5% 24%,19% 8%);
+background:
+radial-gradient(circle at 27% 15%,#ffd08f88 0 2px,transparent 3px),
+radial-gradient(circle at 72% 39%,#4e130d 0 4px,transparent 6px),
+radial-gradient(circle at 42% 63%,#ffbd6b77 0 3px,transparent 4px),
+repeating-linear-gradient(174deg,#f4a357 0 8px,#d35a2d 8px 15px,#8d2a1b 15px 22px,#ee7c3e 22px 30px,#5a160f 30px 35px);
+box-shadow:inset 32px 0 70px #ffd07745,inset -40px -20px 80px #280604bb,0 0 0 1px #ffbd8a26}
+.skewer .cap{position:absolute;left:25%;right:25%;height:4%;border-radius:50%;background:linear-gradient(90deg,#60140f,#ff9b54,#721a12);z-index:2}
+.skewer .top{top:2%}.skewer .bottom{bottom:3%}
+.lamp{position:absolute;z-index:5;right:7vw;top:18vh;width:74px;height:120px;opacity:.58;filter:blur(.2px)}
+.lamp:before{content:"";position:absolute;left:29px;top:0;width:16px;height:90px;background:linear-gradient(#3a281e,#bf672a 60%,#ffd879);border-radius:45% 45% 52% 52%;box-shadow:0 0 44px #ff7d31}
+.lamp:after{content:"";position:absolute;left:35px;top:82px;width:4px;height:36px;background:#3e302c}
+.man{position:absolute;right:2vw;bottom:14vh;width:20vw;height:33vh;border-radius:50% 44% 0 0;background:radial-gradient(circle at 50% 21%,#7b523d 0 8%,#2a1814 9% 17%,transparent 18%),linear-gradient(90deg,transparent 0 34%,#111 35% 100%);opacity:.55;filter:blur(2px)}
+.plateWrap{position:absolute;z-index:14;left:43vw;top:37vh;width:50vw;height:42vh;will-change:transform,opacity,filter}
+.plate{position:relative;width:100%;height:100%;transform:rotate(-7deg);filter:drop-shadow(0 34px 45px #000c)}
+.pide{position:absolute;left:4%;right:4%;top:18%;bottom:18%;border-radius:50% 50% 44% 44%/46% 46% 54% 54%;background:
+radial-gradient(circle at 20% 48%,#e6482c 0 7px,transparent 8px),
+radial-gradient(circle at 72% 34%,#6f9d36 0 10px,transparent 11px),
+radial-gradient(circle at 55% 66%,#eee8df 0 8px,transparent 9px),
+radial-gradient(circle at 39% 31%,#eecc54 0 7px,transparent 8px),
+repeating-radial-gradient(ellipse at 50% 52%,#7e291c 0 8px,#d56732 9px 15px,#eca65d 16px 21px,#613025 22px 25px);
+box-shadow:inset 0 -18px 25px #53201588,0 0 0 6px #d8b177,0 0 0 11px #4f2a1d}
+.pide:after{content:"";position:absolute;inset:8%;border-radius:50%;background:
+radial-gradient(circle at 13% 32%,#5e9435 0 8px,transparent 9px),
+radial-gradient(circle at 82% 69%,#d23e25 0 7px,transparent 8px),
+radial-gradient(circle at 62% 20%,#f6f1e8 0 6px,transparent 7px),
+radial-gradient(circle at 43% 76%,#70a73e 0 8px,transparent 9px)}
+.copyB{top:24vh}
+.copyB h2{font-size:clamp(46px,5.7vw,94px)}
+.statement{position:absolute;z-index:17;left:9vw;top:19vh;width:min(590px,46vw);font-size:clamp(38px,4.8vw,77px);font-weight:850;line-height:.95;letter-spacing:-.05em;will-change:transform,opacity}
+.statement span{color:#555;transition:none}
+.statement .active{color:var(--red)}
+.statement .white{color:#f3f2ed}
+.statementMeta{position:absolute;left:9vw;bottom:8vh;z-index:18;font-size:10px;color:#9b9996}
+.statementMeta:before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-right:9px;vertical-align:middle}
+.skewer2{position:absolute;z-index:15;right:8vw;top:18vh;width:25vw;height:65vh;will-change:transform,opacity,filter}
+.skewer2 .skewer{width:100%;height:100%}
+.finalBottom{position:absolute;z-index:18;left:9vw;right:9vw;bottom:4vh;display:flex;justify-content:space-between;align-items:flex-end;opacity:0;will-change:opacity,transform}
+.finalBottom h3{font-size:clamp(18px,2.2vw,36px);margin:0;line-height:1.05}
+.finalBottom h3 span{color:var(--red)}
+.cards{display:flex;gap:18px}
+.card{width:90px;height:84px;border-radius:16px;border:1px solid #ffffff13;background:#101010;position:relative;overflow:hidden}
+.card:before{content:"";position:absolute;left:28%;right:28%;top:16%;bottom:6%;clip-path:polygon(50% 0,80% 10%,100% 45%,85% 85%,52% 100%,20% 86%,0 45%,18% 10%);background:repeating-linear-gradient(176deg,#ef8c47 0 7px,#ad3d24 7px 13px,#692015 13px 18px)}
+.card:nth-child(2):before{background:repeating-linear-gradient(176deg,#d99256 0 7px,#8f5737 7px 13px,#52311f 13px 18px)}
+.card:nth-child(3):before{background:repeating-linear-gradient(176deg,#e8b067 0 7px,#bd7335 7px 13px,#75502d 13px 18px)}
+.footerWord{position:absolute;right:8vw;bottom:5vh;font-size:9px;color:#666;z-index:20}
+@media(max-width:800px){
+  .track{height:720vh}
+  .header{height:64px;padding:0 18px;grid-template-columns:1fr auto}
+  .nav{display:none}.headerRight .phone{display:none}
+  .progress{top:63px}
+  .copy{left:22px;top:18vh;width:78vw}
+  .copy h1{font-size:13vw}.copy h2,.copyB h2{font-size:11.7vw}
+  .copy p{max-width:66vw;font-size:12px}
+  .skewerWrap{left:39vw;top:25vh;width:72vw;height:70vh}
+  .skewer{width:52vw;height:58vh}
+  .lamp{right:0;top:24vh;transform:scale(.8)}
+  .man{right:-10vw;width:47vw;height:29vh;bottom:12vh}
+  .heroBgText{font-size:40vw;top:62%}
+  .plateWrap{left:3vw;top:47vh;width:105vw;height:34vh}
+  .copyB{top:16vh;width:88vw}
+  .statement{left:22px;top:15vh;width:70vw;font-size:8.2vw}
+  .statementMeta{left:22px;bottom:8vh}
+  .skewer2{right:-14vw;top:35vh;width:62vw;height:56vh}
+  .finalBottom{left:22px;right:18px;bottom:4vh;gap:14px}
+  .cards{gap:7px}.card{width:57px;height:58px;border-radius:11px}
+  .footerWord{display:none}
+}
 </style>
 </head>
 <body>
-<div class="track" id="track">
-  <div class="stage">
-    <div class="frame" id="frame">
-      <video id="vid" muted playsinline loop preload="auto"></video>
-      <div class="shade"></div>
+<main class="track" id="track">
+<section class="stage">
+<header class="header">
+  <div class="logo"><span class="logoDot">K</span><span>KEBAB<br>PRODUCTION</span></div>
+  <nav class="nav"><span>Sorten</span><span>Qualität</span><span>Herstellung</span><span>Lieferung</span><span>Partner</span><span>FAQ</span></nav>
+  <div class="headerRight"><span class="phone">☎ +49 000 000000</span><span class="ctaTop">Angebot anfragen</span></div>
+</header>
+<div class="progress" id="progress"></div>
+<div class="heroBgText" id="heroBgText">KEBAB</div>
+<div class="lamp" id="lamp"></div><div class="man" id="man"></div>
+
+<section class="scene" id="hero">
+  <div class="copy" id="copyA">
+    <div class="eyebrow">Experten für Dönerproduktion</div>
+    <h1>Aufsetzen,<br>anbraten,<br>verkaufen.</h1>
+    <p>Der Dönerspieß, der auf Ihrem Grill bis zum letzten Schnitt saftig bleibt.</p>
+    <span class="redBtn">Produkt ansehen →</span>
+  </div>
+  <div class="skewerWrap" id="skewerA">
+    <div class="skewer">
+      <div class="rod"></div><div class="cap top"></div><div class="meat"></div><div class="cap bottom"></div>
     </div>
   </div>
-</div>
-<div class="progress" id="progress"></div>
-<div class="hint" id="hint">scroll / swipe</div>
-<div class="loader" id="loader"><span>DÖNNER</span></div>
+</section>
 
+<section class="scene" id="sceneB" style="opacity:0">
+  <div class="copy copyB" id="copyB">
+    <div class="eyebrow">Qualität im Alltag</div>
+    <h2>Der Döner, für den Ihre<br>Gäste wiederkommen.</h2>
+    <span class="redBtn">Angebot anfragen →</span><span class="darkBtn">Mehr erfahren</span>
+  </div>
+  <div class="plateWrap" id="plateWrap"><div class="plate"><div class="pide"></div></div></div>
+</section>
+
+<section class="scene" id="sceneC" style="opacity:0">
+  <div class="statement" id="statement">
+    <span data-i="0">Wir machen genau ein</span><br>
+    <span data-i="1">Produkt.</span>
+    <span data-i="2">Den Dönerspieß, der auf</span><br>
+    <span data-i="3">Ihrem Grill bis zum</span><br>
+    <span data-i="4">letzten Schnitt saftig</span><br>
+    <span data-i="5">bleibt.</span>
+    <span data-i="6">Von Hand gesteckt, Lage für Lage,</span><br>
+    <span data-i="7">jeden einzelnen Tag.</span>
+  </div>
+  <div class="statementMeta">Dönerproduktion mit System</div>
+  <div class="skewer2" id="skewerB"><div class="skewer"><div class="rod"></div><div class="cap top"></div><div class="meat"></div><div class="cap bottom"></div></div></div>
+  <div class="finalBottom" id="finalBottom">
+    <h3>Acht Sorten. <span>Drehen Sie selbst.</span></h3>
+    <div class="cards"><div class="card"></div><div class="card"></div><div class="card"></div></div>
+  </div>
+  <div class="footerWord">Produktion · Qualität · Lieferung</div>
+</section>
+</section>
+</main>
 <script>
-(async()=>{
-  const files=[
-    "asset0.b64","asset1.b64","asset2.b64",
-    "p3_0.b64","p3_1.b64","p3_2.b64","p3_3.b64","p3_4.b64","p3_5.b64","p3_6.b64",
-    "p4_0.b64","p4_1.b64","p4_2.b64","p4_3.b64","p4_4.b64","p4_5.b64"
-  ];
-  const vid=document.getElementById("vid");
-  const frame=document.getElementById("frame");
-  const track=document.getElementById("track");
-  const loader=document.getElementById("loader");
-  const progress=document.getElementById("progress");
-  const hint=document.getElementById("hint");
+(()=>{
+const $=id=>document.getElementById(id);
+const track=$('track'),progress=$('progress'),copyA=$('copyA'),skewerA=$('skewerA'),heroBgText=$('heroBgText'),
+sceneB=$('sceneB'),copyB=$('copyB'),plateWrap=$('plateWrap'),sceneC=$('sceneC'),statement=$('statement'),
+skewerB=$('skewerB'),finalBottom=$('finalBottom'),lamp=$('lamp'),man=$('man');
+const spans=[...statement.querySelectorAll('span')];
+const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+const seg=(p,a,b)=>clamp((p-a)/(b-a));
+const smooth=t=>t*t*(3-2*t);
+const lerp=(a,b,t)=>a+(b-a)*t;
+let target=0,current=0;
+function measure(){
+ const r=track.getBoundingClientRect(),max=Math.max(1,track.offsetHeight-innerHeight);
+ target=clamp(-r.top/max);
+ progress.style.width=(target*100)+'%';
+}
+function tr(el,x=0,y=0,s=1,r=0){
+ el.style.transform=`translate3d(${x}px,${y}px,0) scale(${s}) rotate(${r}deg)`;
+}
+function render(){
+ current+=(target-current)*.16;
+ const p=current;
 
-  let target=0,current=0,lastScroll=scrollY,lastTs=performance.now(),started=false;
+ const a=smooth(seg(p,.00,.27));
+ copyA.style.opacity=1-seg(p,.16,.30);
+ tr(copyA,lerp(0,-130,a),lerp(0,-25,a),lerp(1,.96,a));
+ copyA.style.filter=`blur(${seg(p,.19,.30)*4}px)`;
 
-  function clamp(v,a=0,b=1){return Math.min(b,Math.max(a,v))}
-  function measure(){
-    const r=track.getBoundingClientRect();
-    const max=Math.max(1,track.offsetHeight-innerHeight);
-    target=clamp(-r.top/max);
-    progress.style.width=(target*100)+"%";
-    hint.style.opacity=String(clamp(1-target*16));
-  }
+ const zoom=smooth(seg(p,.02,.31));
+ tr(skewerA,lerp(0,-innerWidth*.23,zoom),lerp(0,-innerHeight*.03,zoom),lerp(1,2.55,zoom),lerp(0,-2.5,zoom));
+ skewerA.style.opacity=1-seg(p,.32,.43);
+ heroBgText.style.opacity=(.12*(1-seg(p,.18,.34)));
+ heroBgText.style.transform=`translate(-50%,-50%) scale(${lerp(.9,1.25,zoom)})`;
+ lamp.style.opacity=.58*(1-seg(p,.28,.39));
+ man.style.opacity=.55*(1-seg(p,.29,.41));
 
-  function animate(){
-    current += (target-current)*.12;
-    const p=current;
-    const scale=1.01 + Math.sin(p*Math.PI)*.08 + p*.04;
-    const tx=(-3 + p*6);
-    const ty=(p<.5 ? p*2.4 : (1-p)*2.4);
-    const rot=(p-.5)*1.8;
-    frame.style.transform=`translate3d(${tx}vw,${ty}vh,0) scale(${scale}) rotate(${rot}deg)`;
-    frame.style.filter=`saturate(${1+p*.18}) contrast(${1+p*.05})`;
-    requestAnimationFrame(animate);
-  }
+ const bIn=smooth(seg(p,.22,.37)),bOut=smooth(seg(p,.43,.57));
+ sceneB.style.opacity=(bIn*(1-bOut));
+ copyB.style.opacity=(bIn*(1-bOut));
+ tr(copyB,lerp(-60,0,bIn)-lerp(0,80,bOut),lerp(16,0,bIn),1);
+ copyB.style.filter=`blur(${lerp(5,0,bIn)+bOut*5}px)`;
+ tr(plateWrap,lerp(210,0,bIn)-lerp(0,innerWidth*.18,bOut),lerp(90,0,bIn)-lerp(0,35,bOut),lerp(.62,1.05,bIn)+bOut*.18,lerp(5,0,bIn)-bOut*3);
+ plateWrap.style.opacity=(bIn*(1-bOut));
 
-  async function start(){
-    if(started) return;
-    started=true;
-    try{
-      vid.classList.remove("fallback");
-      vid.muted=true;
-      vid.playsInline=true;
-      vid.loop=true;
-      vid.playbackRate=1;
-      await vid.play();
-    }catch(e){
-      vid.classList.add("fallback");
-    }
-  }
+ const cIn=smooth(seg(p,.47,.63));
+ sceneC.style.opacity=cIn;
+ const sIn=smooth(seg(p,.49,.66));
+ tr(statement,lerp(-70,0,sIn),lerp(24,0,sIn),1);
+ statement.style.opacity=sIn;
+ const sk=smooth(seg(p,.52,.75));
+ tr(skewerB,lerp(100,0,sk),lerp(45,0,sk),lerp(.62,1.22,sk),lerp(4,0,sk));
+ skewerB.style.opacity=sk;
 
-  try{
-    const parts=await Promise.all(files.map(async file=>{
-      const r=await fetch(file,{cache:"force-cache"});
-      if(!r.ok) throw new Error(file);
-      return (await r.text()).trim();
-    }));
-    const b64=parts.join("");
-    const binary=atob(b64);
-    const bytes=new Uint8Array(binary.length);
-    for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
-    const blob=new Blob([bytes],{type:"video/mp4"});
-    vid.src=URL.createObjectURL(blob);
+ spans.forEach((sp,i)=>{
+   const start=.56+i*.032,end=start+.11;
+   const q=smooth(seg(p,start,end));
+   if(i===1||i===4||i===7){
+      sp.style.color=`rgb(${Math.round(lerp(85,255,q))},${Math.round(lerp(85,42,q))},${Math.round(lerp(85,50,q))})`;
+   } else {
+      const v=Math.round(lerp(85,244,q));
+      sp.style.color=`rgb(${v},${v},${Math.max(80,v-5)})`;
+   }
+ });
 
-    vid.addEventListener("loadeddata",async()=>{
-      loader.classList.add("hide");
-      try{
-        await start();
-      }catch(e){}
-    },{once:true});
+ const final=smooth(seg(p,.82,.96));
+ finalBottom.style.opacity=final;
+ finalBottom.style.transform=`translateY(${lerp(30,0,final)}px)`;
+ tr(skewerB,lerp(100,0,sk)-lerp(0,innerWidth*.04,final),lerp(45,0,sk)-lerp(0,innerHeight*.06,final),lerp(.62,1.22,sk)+final*.32,lerp(4,0,sk)-final*2);
 
-    vid.addEventListener("canplay",()=>start(),{once:true});
-
-    // First touch/scroll always starts playback on iPhone.
-    addEventListener("touchstart",start,{passive:true,once:true});
-    addEventListener("pointerdown",start,{passive:true,once:true});
-    addEventListener("scroll",()=>{
-      start();
-      const now=performance.now();
-      const dy=Math.abs(scrollY-lastScroll);
-      const dt=Math.max(16,now-lastTs);
-      const speed=Math.min(1.8,.75+(dy/dt)*2.6);
-      try{vid.playbackRate=speed}catch(e){}
-      lastScroll=scrollY; lastTs=now;
-      measure();
-    },{passive:true});
-
-    // Safety: if autoplay is blocked, visual still moves.
-    setTimeout(()=>{if(vid.paused) vid.classList.add("fallback")},1200);
-  }catch(e){
-    loader.querySelector("span").textContent="Reload";
-    vid.classList.add("fallback");
-    loader.classList.add("hide");
-  }
-
-  addEventListener("resize",measure,{passive:true});
-  measure();
-  animate();
+ requestAnimationFrame(render);
+}
+addEventListener('scroll',measure,{passive:true});
+addEventListener('resize',measure,{passive:true});
+measure();render();
 })();
 </script>
 </body>
